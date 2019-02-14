@@ -7,12 +7,12 @@ using namespace Perseus::Utils;
 
 int main(void)
 {
-  //  std::string sModelPath = "/Users/luma/Code/Luma/PWP3D/Files/Models/Renderer/long.obj";
-  //  std::string sSrcImage = "/Users/luma/Code/Luma/PWP3D/Files/Images/Red.png";
-  //  std::string sCameraMatrix = "/Users/luma/Code/Luma/PWP3D/Files/CameraCalibration/900nc.cal";
-  //  std::string sTargetMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/480p_All_VideoMask.png";
-  //  std::string sHistSrc = "/Users/luma/Code/Luma/PWP3D/Files/Masks/Red_Source.png";
-  //  std::string sHistMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/Red_Mask.png";
+    std::string sModelPath =      "/home/rlvc/Workspace/0_code/PWP3D/Files/Models/Renderer/long.obj";
+    std::string sSrcImage =       "/home/rlvc/Workspace/0_code/PWP3D/Files/Images/Red.png";
+    std::string sCameraMatrix =   "/home/rlvc/Workspace/0_code/PWP3D/Files/CameraCalibration/900nc.cal";
+    std::string sTargetMask =     "/home/rlvc/Workspace/0_code/PWP3D/Files/Masks/480p_All_VideoMask.png";
+    std::string sHistSrc =        "/home/rlvc/Workspace/0_code/PWP3D/Files/Masks/Red_Source.png";
+    std::string sHistMask =       "/home/rlvc/Workspace/0_code/PWP3D/Files/Masks/Red_Mask.png";
 
 
   // blue car demo
@@ -23,13 +23,13 @@ int main(void)
   //  std::string sHistSrc = "/Users/luma/Code/Luma/PWP3D/Files/Images/248-LiveRGB.png";
   //  std::string sHistMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/248-ID-3-LiveImage.png";
 
-  // red can demo
-  std::string sModelPath = "/Users/luma/Code/DataSet/Mesh/RedCan.obj";
-  std::string sSrcImage = "/Users/luma/Code/Luma/PWP3D/Files/Images/248-LiveRGB.png";
-  std::string sCameraMatrix = "/Users/luma/Code/Luma/PWP3D/Files/CameraCalibration/Kinect.cal";
-  std::string sTargetMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/480p_All_VideoMask.png";
-  std::string sHistSrc = "/Users/luma/Code/Luma/PWP3D/Files/Images/248-LiveRGB.png";
-  std::string sHistMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/248-ID-1-LiveImage.png";
+//  // red can demo
+//  std::string sModelPath = "/Users/luma/Code/DataSet/Mesh/RedCan.obj";
+//  std::string sSrcImage = "/Users/luma/Code/Luma/PWP3D/Files/Images/248-LiveRGB.png";
+//  std::string sCameraMatrix = "/Users/luma/Code/Luma/PWP3D/Files/CameraCalibration/Kinect.cal";
+//  std::string sTargetMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/480p_All_VideoMask.png";
+//  std::string sHistSrc = "/Users/luma/Code/Luma/PWP3D/Files/Images/248-LiveRGB.png";
+//  std::string sHistMask = "/Users/luma/Code/Luma/PWP3D/Files/Masks/248-ID-1-LiveImage.png";
 
   // ---------------------------------------------------------------------------
   char str[100];
@@ -92,10 +92,10 @@ int main(void)
   iterConfig->levelSetBandSize = 8;
   iterConfig->iterObjectIds[viewIdx][objectIdx] = 0;
   iterConfig->iterViewCount = 1;
-  iterConfig->iterCount = 1;
+  iterConfig->iterCount = 3;
 
   //step size per object and view
-  objects[objectIdx]->stepSize[viewIdx] = new StepSize3D(0.2f, 0.5f, 0.5f, 10.0f);
+  objects[objectIdx]->stepSize[viewIdx] = new StepSize3D(0.05f, 0.1f, 0.1f, 0.1f);
 
   //initial pose per object and view
   // Notice the input pose here is angle, not radians for the rotation part
@@ -106,8 +106,10 @@ int main(void)
   //  objects[objectIdx]->initialPose[viewIdx]->SetFrom( -3.0f,-4.5f,28.f, -220.90f, -207.77f, 87.48f);
 
   // for red can demo
+//  objects[objectIdx]->initialPose[viewIdx]->SetFrom(
+//        1.0f, 3.0f, 30.f, 180.f, 80.f, 60.f);
   objects[objectIdx]->initialPose[viewIdx]->SetFrom(
-        1.0f, 3.0f, 30.f, 180.f, 80.f, 60.f);
+        -1.98f, -2.90f, 37.47f, -40.90f, -207.77f, 27.48f);
 
   //primary initilisation
   OptimisationEngine::Instance()->Initialise(width, height);
@@ -128,7 +130,7 @@ int main(void)
 
   std::cout<<"[App] Finish Rendered object initial pose."<<std::endl;
 
-  for (i=0; i<4; i++)
+  for (i=3; i<4; i++)
   {
     switch (i)
     {
@@ -153,7 +155,7 @@ int main(void)
     printf("======= mode: useCUDAAEF: %d, use CUDARender %d ========;\n",
            iterConfig->useCUDAEF, iterConfig->useCUDARender);
 
-    sprintf(str, "/Users/luma/Code/Luma/PWP3D/Files/Results/result%04d.png", i);
+    sprintf(str, "/home/rlvc/Workspace/0_code/PWP3D/Files/Results/result%04d.png", i);
 
     //main processing
     t.restart();
@@ -182,7 +184,7 @@ int main(void)
   }
 
   //posteriors plot
-  sprintf(str, "/Users/luma/Code/Luma/PWP3D/Files/Results/posteriors.png");
+  sprintf(str, "/home/rlvc/Workspace/0_code/PWP3D/Files/Results/posteriors.png");
   VisualisationEngine::Instance()->GetImage(
         ResultImage, GETIMAGE_POSTERIORS,
         objects[objectIdx], views[viewIdx], objects[objectIdx]->pose[viewIdx]);
